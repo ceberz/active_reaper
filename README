@@ -1,0 +1,16 @@
+Mark your ActiveRecord classes for automatic deletion:
+
+class SomeRecord < ActiveRecord::Base
+  reap :after => 5.months
+end
+
+The value attached to :after must be a Fixnum or a class that responds to ago().  Additional options are:
+
+:using - may be either :delete or :destroy, specifying a difference between a single call to SomeRecord.delete_all(), and multiple calls to some_record_instance.destroy(); defaults to :destroy
+:determined_by - the column with a date/time value used to find records ready for deletion; defaults to :created_at
+
+class SomeRecord < ActiveRecord::Base
+  reap :after => 1.day, :using => :delete, :determined_by => :read_by_user_on
+end
+
+Calling Reaper.reap!() will process all classes marked for reaping.  Call within a delayed job, rake task, etc.
