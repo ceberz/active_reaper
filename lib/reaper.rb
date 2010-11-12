@@ -32,18 +32,12 @@ module Reaper
   
   class Methods
     def self.reap_destroy(klass, window, field)
-      while klass.count("#{klass.table_name}.#{field} < '#{window.ago.to_s(:db)}'") > 0
+      ids_to_destroy = klass.connection.select_values("SELECT #{klass.table_name}.id FROM #{klass.table_name} WHERE #{klass.table_name}.#{field} < '#{window.ago.to_s(:db)}'")
+      ids_to_destroy.each_slice(BATCH_SIZE) do |batch|
         begin
-          klass.find(:all, :conditions => "#{klass.table_name}.#{field} < '#{window.ago.to_s(:db)}'", :order => "#{klass.table_name}.#{field} ASC", :limit => BATCH_SIZE).each do |item|
-            begin
-              item.destroy
-            rescue Exception => e
-              # HoptoadNotifier.notify(e) # Do you use Hoptoad?
-              next
-            end
-          end 
-        rescue Exception => e
-          # HoptoadNotifier.notify(e) # Do you use Hoptoad?
+          klass.destroy(batch)
+        rescue
+          HoptoadNotifier.notify(e) # Do you use Hoptoad?
         end
       end
     end
