@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Chris Eberz"]
   s.email       = ["chris@chriseberz.com"]
   s.homepage    = ""
-  s.summary     = %q{Automate the deletion of your ActiveRecord models.}
+  s.summary     = %q{Your ActiveRecord models can cleanly mark themsleves for deletion after a specifc time.}
   s.description = %q{Set ActiveRecord models to delete themselves after a fixed time, or when a certain criteria is met.}
 
   s.rubyforge_project = "active_reaper"
