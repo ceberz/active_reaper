@@ -57,7 +57,7 @@ If you want to place a guard on top of the expiration time.  The guard can be th
 
 Straightforward:
 
-    rake reap
+    rake reaper:reap
 
 ## Don't Fear The Reaper ##
 
